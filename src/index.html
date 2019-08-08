@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<HTML>
+<head>
+<meta charset="utf-8" />
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<script>
+  var data = { name: "mike", height: null}
+  var vm = new Vue({
+    el: "#app",
+    template: "<div id="app">Hello World</div>
+    data: data
+  });
+  console.log(vm.name);
+
+  data.height = 6;
+  vm.$watch('name', function(newVal){
+    console.log(newVal);
+  })
+</script>
+</body>
+</HTML>
