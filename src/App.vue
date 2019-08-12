@@ -1,68 +1,77 @@
 <template>
   <div id="app">
-    <!--Event Handling-->
-    <app-counter initialValue="2"></app-counter>
-    <app-counter></app-counter>
-    <!--Each appcounter has it's own state so these will be indepentdent-->
-    <app-counter></app-counter>
-    <!-- use v-on to monitor dom for click and then update the value-->
-    <app-counter2></app-counter2>
-    <input type="text" v-on:keyup="number++">
-    <!-- counts the number of vharacters entered-->
-    {{ number}}
-    <!--Event modifier-->
-    <form v-on:submit.prevent="number++">
-      <input type="text">
-    </form>
-    <!-- Key modifier-->
-    <input type="text" v-on:keyup.enter="number++">
+    <!-- Single component transition-->
+    <button v-on:click="toggleShow">Toggle show</button>
+    <transition name="myTransition">
+      <!-- TRansition between more than one element, you need a unique key-->
+      <!--<p v-if="show" key="my-transition-key">Hello transition</p>
+      <p v-else kry="my-hello-key">Hello world</p>-->
+      <app-home v-if="show" key="my-transition-key"></app-home>
+      <app-about v-else kry="my-hello-key"></app-about>
+    </transition>
+    <br>
+    <!-- Add an appear attributer to get the transitio on first view -->
+    <transition appear name="myAnimation" enter="myClass">
+      <p v-if="show">Hello animation</p>
+    </transition>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
+Vue.component("app-home", {
+  template: "<div>Home</div>"
+});
+Vue.component("app-about", {
+  template: "<div>About</div>"
+});
 
 export default {
   name: "App",
   data: function() {
     return {
-      number: 0
-    };
-  }
-};
-
-Vue.component("app-counter", {
-  props: ["initialValue"],
-  data: function() {
-    return {
-      value: 0
+      show: true
     };
   },
   methods: {
-    count: function(initialValue) {
-      this.value += parseInt(initialValue);
-      console.log(this.value);
+    toggleShow: function() {
+      this.show = !this.show;
     }
-  },
-  template: '<button v-on:click.once="count">{{ value }} </button>'
-});
-Vue.component("app-counter2", {
-  data: function() {
-    return {
-      value: 0
-    };
-  },
-  template: '<button v-on:mouseover="value++">{{ value }} </button>'
-});
+  }
+};
 </script>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+/*
+v-enter v-enter-active v-enter-to v-leave v-leave-active v-leave-to
+*/
+.myTransition-enter-active,
+.myTransition-leave-active {
+  transition: opacity 0.5s;
+}
+.myTransition-enter-active,
+.myTransition-leave-active {
+  opacity: 0;
+}
+.myAnimation-enter-active {
+  animation: bounce-in 0.5s;
+}
+.myAnimation-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+.myClass {
+  /* Super easy to make classes  to be able to combine a vue with a library like animate.css*/
+}
+/* Need to add a keygframe to control bounce*/
+@keyfrane bounce-in {
+  0% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>
